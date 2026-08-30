@@ -1,0 +1,32 @@
+.landing_main_container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.landing_header_section{
+    width: 60%;
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 80px;
+}
+
+.entry_section{
+    height: 15%;
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.entry_section button{
+    padding: 15px;
+    width: 140px;
+    border-radius: 8px;
+    font-size: 16px;
+    border: none;
+}
