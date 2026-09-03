@@ -44,6 +44,7 @@ const groupSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Conversation",
       required: true,
+      unique: true,
     },
   },
   {
@@ -52,16 +53,10 @@ const groupSchema = new mongoose.Schema(
   }
 );
 
-/*
- * Used when discovering public groups.
- */
 groupSchema.index({
   visibility: 1,
 });
 
-/*
- * Useful when finding groups created by an admin.
- */
 groupSchema.index({
   adminId: 1,
 });

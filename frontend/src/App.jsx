@@ -1,10 +1,11 @@
-import {Routes, Route, Navigate} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 import LandingPage from "./pages/Auth/LandingPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 
-import HomePage from "./pages/Home/HomePage";
+// import HomePage from "./pages/Home/HomePage";
+import HomeRoutes from "./pages/Home/HomeRoutes";
 import ConversationsPage from "./pages/Conversations/ConversationsPage";
 import DiscoverPage from "./pages/Discover/DiscoverPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage"; // 1. Import 404 Page
@@ -25,7 +26,7 @@ function App(){
 
             {/* 2. Protected Routes (Unauthenticated users redirected to /login) */}
             <Route element={<ProtectedRoute />}>
-                <Route path="/home/*" element={<HomePage />} />
+                <Route path="/home/*" element={<HomeRoutes />} />
                 <Route path="/conversations/*" element={<ConversationsPage />} />
                 <Route path="/discover/*" element={<DiscoverPage />} />
             </Route>

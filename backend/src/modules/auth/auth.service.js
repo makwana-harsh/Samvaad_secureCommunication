@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (userData) => {
     const existingUser = await User.findOne({
         $or: [
-        { emailId: userData.emailId },
-        { userName: userData.userName },
-        { mobileNo: userData.mobileNo }
+            { emailId: userData.emailId },
+            { userName: userData.userName },
+            { mobileNo: userData.mobileNo }
         ]
     });
 
@@ -30,7 +30,7 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async ({ userName, userPassword }) => {
     const user = await User.findOne({ userName }).select("+password");
-    if(!user){
+    if (!user) {
         throw new Error("Invalid username or password");
     }
 
@@ -42,11 +42,11 @@ export const loginUser = async ({ userName, userPassword }) => {
     const accessToken = jwt.sign(
         { id: user._id, userName: user.userName },
         process.env.JWT_ACCESS_TOKEN_SECRET,
-        { expiresIn: "2m" }
+        { expiresIn: "15m" }
     );
 
     const refreshToken = jwt.sign(
-        { id: user._id, userName: user.userName},
+        { id: user._id, userName: user.userName },
         process.env.JWT_REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
     );
@@ -54,18 +54,43 @@ export const loginUser = async ({ userName, userPassword }) => {
     return {
         accessToken,
         refreshToken,
-        user: { id: user._id, userName: user.userName, emailId: user.emailId }
+        user: { 
+            id: user._id, 
+            userName: user.userName,
+            fullName: user.fullName, 
+            emailId: user.emailId,
+            mobileNo: user.mobileNo,
+            avatar: user.avatar 
+        }
     };
 };
 
-export const verifyAndGenerateAccessToken = (refreshToken) => {
-  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+export const verifyAndGenerateAccessToken = async (refreshToken) => {
+    // 1. Verify refresh token using exact secret name
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
 
-  const accessToken = jwt.sign(
-    { id: decoded.id },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
-  );
+    // 2. Fetch fresh user data to return back for re-hydration
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+        throw new Error("User not found");
+    }
 
-  return accessToken;
+    // 3. Issue new access token
+    const accessToken = jwt.sign(
+        { id: user._id, userName: user.userName },
+        process.env.JWT_ACCESS_TOKEN_SECRET,
+        { expiresIn: "15m" }
+    );
+
+    return {
+        accessToken,
+        user: {
+            id: user._id,
+            userName: user.userName,
+            fullName: user.fullName,
+            emailId: user.emailId,
+            mobileNo: user.mobileNo,
+            avatar: user.avatar
+        }
+    };
 };

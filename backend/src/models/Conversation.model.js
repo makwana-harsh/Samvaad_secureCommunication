@@ -8,6 +8,11 @@ const conversationSchema = new mongoose.Schema(
       required: true,
     },
 
+    /*
+     * Used only for private conversations.
+     *
+     * Exactly two users.
+     */
     participants: {
       type: [
         {
@@ -18,9 +23,28 @@ const conversationSchema = new mongoose.Schema(
       default: [],
     },
 
+    /*
+     * Used only for group conversations.
+     */
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",
+      default: null,
+    },
+
+    /*
+     * Used to guarantee that only one private
+     * conversation exists between two users.
+     *
+     * Example:
+     *
+     * userA_userB
+     *
+     * The IDs must always be stored in sorted order
+     * before generating this value.
+     */
+    privateConversationKey: {
+      type: String,
       default: null,
     },
 
@@ -40,6 +64,16 @@ const conversationSchema = new mongoose.Schema(
       default: null,
     },
 
+    /*
+     * null:
+     *     Permanent conversation
+     *
+     * 30:
+     *     Messages remain for 30 days
+     *
+     * This is mainly used for temporary
+     * non-friend conversations.
+     */
     messageRetentionDays: {
       type: Number,
       default: null,
@@ -53,29 +87,36 @@ const conversationSchema = new mongoose.Schema(
 );
 
 /*
- * Used to find private conversations
- * involving a particular user.
+ * Find conversations involving a user.
  */
 conversationSchema.index({
   participants: 1,
+  updatedAt: -1,
 });
 
 /*
- * Used to find the conversation belonging
- * to a particular group.
+ * Find a group's conversation.
  */
 conversationSchema.index({
   groupId: 1,
 });
 
 /*
- * Useful when displaying conversations
- * ordered by recent activity.
+ * Guarantees one private conversation
+ * for one pair of users.
+ *
+ * sparse allows multiple documents where
+ * privateConversationKey is null.
  */
-conversationSchema.index({
-  participants: 1,
-  updatedAt: -1,
-});
+conversationSchema.index(
+  {
+    privateConversationKey: 1,
+  },
+  {
+    unique: true,
+    sparse: true,
+  }
+);
 
 const Conversation = mongoose.model(
   "Conversation",

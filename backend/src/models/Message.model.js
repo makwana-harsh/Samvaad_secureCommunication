@@ -6,12 +6,25 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Conversation",
       required: true,
+      index: true,
     },
 
+    /*
+     * User who sent the message.
+     *
+     * For normal messages:
+     * senderId = actual User ID.
+     *
+     * For system messages:
+     * senderId can be null because the message
+     * represents an event such as:
+     *
+     * "Rahul left the group"
+     */
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null,
     },
 
     messageType: {
@@ -27,22 +40,78 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
 
+    /*
+     * For text messages:
+     *     "Hello Rahul"
+     *
+     * For media messages:
+     *     Cloudinary secure URL
+     *
+     * For system messages:
+     *     "Rahul left the group"
+     */
     content: {
       type: String,
       required: true,
     },
 
     /*
-     * This field is calculated from:
+     * Original filename supplied by the sender.
      *
-     * conversation.messageRetentionDays
+     * Example:
+     *     "holiday_photo.jpg"
+     *     "project.pdf"
+     *     "voice_note.mp3"
      *
-     * It is null for conversations where
-     * messages should not automatically expire.
+     * Used when the receiver downloads the file.
+     */
+    originalFileName: {
+      type: String,
+      default: null,
+    },
+
+    /*
+     * Cloudinary public ID.
+     *
+     * Example:
+     *
+     * Samvaad_Project/messages/
+     * 68abc.../69xyz...
+     *
+     * Storing this separately makes media deletion
+     * reliable.
+     */
+    cloudinaryPublicId: {
+      type: String,
+      default: null,
+    },
+
+    /*
+     * Cloudinary resource type.
+     *
+     * Examples:
+     * image
+     * video
+     * raw
+     */
+    cloudinaryResourceType: {
+      type: String,
+      default: null,
+    },
+
+    /*
+     * For temporary non-friend conversations:
+     *
+     * expiresAt = exact time when this message
+     * should be deleted.
+     *
+     * For permanent conversations:
+     * expiresAt = null
      */
     expiresAt: {
       type: Date,
       default: null,
+      index: true,
     },
   },
   {
@@ -52,10 +121,7 @@ const messageSchema = new mongoose.Schema(
 );
 
 /*
- * Message history query:
- *
- * Find messages belonging to a conversation
- * and return them ordered by creation time.
+ * Efficient message history query.
  */
 messageSchema.index({
   conversationId: 1,
@@ -63,28 +129,11 @@ messageSchema.index({
 });
 
 /*
- * TTL index.
- *
- * MongoDB automatically removes a Message
- * when expiresAt is reached.
- *
- * The partial filter ensures that only messages
- * having an actual Date in expiresAt participate
- * in the TTL index.
+ * Efficient cleanup query.
  */
-messageSchema.index(
-  {
-    expiresAt: 1,
-  },
-  {
-    expireAfterSeconds: 0,
-    partialFilterExpression: {
-      expiresAt: {
-        $type: "date",
-      },
-    },
-  }
-);
+messageSchema.index({
+  expiresAt: 1,
+});
 
 const Message = mongoose.model("Message", messageSchema);
 

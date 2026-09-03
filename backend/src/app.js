@@ -7,6 +7,7 @@ import cors from 'cors';
 
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware.js';
 import authRoutes from './modules/auth/auth.routes.js';
+import homeRoutes from './modules/home/home.routes.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended:true }));
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/home', homeRoutes);
 
 app.use(errorHandlerMiddleware);
 
