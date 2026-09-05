@@ -1,0 +1,109 @@
+.conversation-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Tabs */
+.conversation-tabs {
+  display: flex;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #aaaaaa;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+}
+
+.tab-btn.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Controls Area */
+.conversation-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 30px 8px 32px;
+  font-size: 0.85rem;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #888888;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.clear-search-btn:hover {
+  color: #ffffff;
+}
+
+/* Create Group Button */
+.create-group-btn {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-group-btn:hover {
+  background-color: #2563eb;
+}

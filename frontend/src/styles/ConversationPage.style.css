@@ -1,0 +1,92 @@
+.layout-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #0b0f19;
+  color: #f8fafc;
+  font-family: inherit;
+}
+
+.top-search-bar {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background-color: #111827;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-search-bar input {
+  flex: 1;
+  background-color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #ffffff;
+  outline: none;
+}
+
+.create-group-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.main-split-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar-section {
+  width: 340px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  background-color: #111827;
+}
+
+.tab-navbar {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.cards-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.chatbox-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #0b0f19;
+}
+
+.state-msg {
+  padding: 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}

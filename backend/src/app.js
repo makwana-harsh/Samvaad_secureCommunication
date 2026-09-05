@@ -8,6 +8,7 @@ import cors from 'cors';
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import homeRoutes from './modules/home/home.routes.js';
+import conversationRoutes from './modules/conversation/conversation.routes.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended:true }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/home', homeRoutes);
+app.use('/api/conversations', conversationRoutes);
 
 app.use(errorHandlerMiddleware);
 

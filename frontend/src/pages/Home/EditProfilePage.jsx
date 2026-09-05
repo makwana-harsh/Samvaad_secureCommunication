@@ -269,7 +269,7 @@ function EditProfilePage({ isEditMode = false }) {
 
       <div className="edit-profile-content">
         {/* Avatar Section */}
-        <div className="avatar-wrapper">
+        <div className="edit-profile-avatar-wrapper">
           <img
             src={previewAvatar || defaultAvatar}
             alt="Profile Avatar"
