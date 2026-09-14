@@ -95,8 +95,8 @@
   * search-bar :- 
     * used to search users on the platform
   
-  * list of all the currently users across the platform in the form of card
-   * that card contains option to send request to that user
+  * list of all the users across which has registered the platform in the form of card
+   * that card contains option to send request to that user, also reject the request , join public group etc
 
 
 

@@ -2,7 +2,7 @@ import React,{ useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getUserProfileFunct } from "../../api/home.api";
-import "../../styles/HomePage.style.css";
+import "../../styles/Home/HomePage.style.css";
 
 import defaultAvatar from "../../assets/default_avatar.avif";
 

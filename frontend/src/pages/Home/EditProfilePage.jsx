@@ -9,7 +9,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import defaultAvatar from "../../assets/default_avatar.avif";
 
-import "../../styles/EditProfilePage.style.css";
+import "../../styles/Home/EditProfilePage.style.css";
 
 // ----------------------------------------------------------------------
 // CONSTANTS & HELPERS

@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import '../styles/HeaderComponent.style.css';
 
 
 function HeaderComponent() {

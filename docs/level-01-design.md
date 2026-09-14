@@ -37,7 +37,7 @@ The Discover page is designed to help users find and connect with people across 
 
 ### Components
 
-* Currently Active Users 
+* All the registered Users 
 * Search Results 
 * Suggested Users *(Future Enhancement)*
 * Suggested Groups *(Future Enhancement)*
