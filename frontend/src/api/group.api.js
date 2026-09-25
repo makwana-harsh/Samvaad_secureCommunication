@@ -19,3 +19,8 @@ export const sendGroupInvitationFunct = async (groupId, targetUserId) => {
   const response = await api.post(`/groups/${groupId}/invite`, { targetUserId });
   return response.data;
 };
+
+export const createGroupApi = async (groupData) => {
+  const response = await api.post("/groups/create", groupData);
+  return response.data;
+};

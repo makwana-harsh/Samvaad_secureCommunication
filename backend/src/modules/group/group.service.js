@@ -70,6 +70,86 @@ export const getGroupDetailsService = async (groupId, currentUserId) => {
     };
 };
 
+
+export const createGroupService = async (groupData, currentUserId) => {
+    const session = await mongoose.startSession();
+
+    try {
+        session.startTransaction();
+
+        const {memberIds = [],...groupFields} = groupData;
+        const allMembers = [currentUserId.toString(),...memberIds.map(id => id.toString()),];
+
+        const uniqueMembers = [
+            ...new Set(allMembers),
+        ].map(id => new mongoose.Types.ObjectId(id));
+
+        // Generate IDs first
+        const conversationId = new mongoose.Types.ObjectId();
+        const groupId = new mongoose.Types.ObjectId();
+
+        // Create conversation
+        const conversation = await Conversation.create(
+            [{
+                _id: conversationId,
+                type: "group",
+                participants: uniqueMembers,
+                groupId: groupId,
+            }],
+            { session }
+        );
+
+        // Create group
+        const [group] = await Group.create(
+            [{
+                _id: groupId,
+                ...groupFields,
+                adminId: currentUserId,
+                members: uniqueMembers,
+                conversationId: conversationId,
+            }],
+            { session }
+        );
+
+        // Add group to every member's joinedGroups
+        await User.updateMany(
+            {
+                _id: { $in: uniqueMembers },
+            },
+            {
+                $addToSet: {
+                    joinedGroups: group._id,
+                },
+            },
+            { session }
+        );
+
+        const user = await User.findById(currentUserId)
+            .select("userName")
+            .session(session);
+
+        const message = await createSystemMessage(
+            conversationId,
+            `${user?.userName || "Admin"} created the group "${group.groupName}"`,
+            session
+        );
+
+        await session.commitTransaction();
+
+        return {
+            group,
+            conversationId,
+            message,
+        };
+
+    } catch (error) {
+        await session.abortTransaction();
+        throw error;
+    } finally {
+        await session.endSession();
+    }
+};
+
 export const joinGroupService = async (groupId, currentUserId) => {
     const session = await mongoose.startSession();
 

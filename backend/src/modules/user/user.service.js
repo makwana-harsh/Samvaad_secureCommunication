@@ -5,6 +5,113 @@ import Conversation from "../../models/Conversation.model.js";
 import Group from "../../models/Group.model.js"; // 👈 FIX 1: Import Group model
 import { emitToUser } from "../../sockets/socket.manager.js";
 
+
+// export const searchMinimalUsersService = async (currentUserId, search = "", page = 1, limit = 8) => {
+//   const query = {
+//     _id: { $ne: currentUserId }, // Exclude current admin user from list
+//   };
+
+//   if (search.trim()) {
+//     query.$or = [
+//       { userName: { $regex: search, $options: "i" } },
+//       { fullName: { $regex: search, $options: "i" } },
+//     ];
+//   }
+
+//   const skip = (page - 1) * limit;
+
+//   const users = await User.find(query)
+//     .select("_id userName fullName avatar")
+//     .skip(skip)
+//     .limit(limit)
+//     .lean();
+
+//   const usersWithFriendStatus = users.map((user) => ({
+//     ...user,
+//     isFriend: friendIds.has(user._id.toString()),
+//   }));
+
+//   const totalUsers = await User.countDocuments(query);
+
+//   return {
+//     users,
+//     pagination: {
+//       currentPage: Number(page),
+//       totalPages: Math.ceil(totalUsers / limit),
+//       hasMore: skip + users.length < totalUsers,
+//     },
+//   };
+// };
+
+
+export const searchMinimalUsersService = async (
+  currentUserId,
+  search = "",
+  page = 1,
+  limit = 8
+) => {
+  const query = {
+    _id: { $ne: currentUserId },
+  };
+
+  if (search.trim()) {
+    query.$or = [
+      { userName: { $regex: search, $options: "i" } },
+      { fullName: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const skip = (page - 1) * limit;
+
+  // Get current user's friends
+  const currentUser = await User.findById(currentUserId)
+    .select("friends")
+    .lean();
+
+  const friendIds = new Set(
+    (currentUser?.friends || []).map((id) => id.toString())
+  );
+
+  const users = await User.find(query)
+    .select("_id userName fullName avatar")
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  const usersWithFriendStatus = users.map((user) => ({
+    ...user,
+    isFriend: friendIds.has(user._id.toString()),
+  }));
+
+  const totalUsers = await User.countDocuments(query);
+
+  console.log("CURRENT USER ID:", currentUserId);
+
+console.log(
+  "CURRENT USER FRIENDS:",
+  (currentUser?.friends || []).map((id) => id.toString())
+);
+
+console.log(
+  "SEARCHED USERS:",
+  users.map((user) => ({
+    id: user._id.toString(),
+    userName: user.userName,
+    isFriend: friendIds.has(user._id.toString()),
+  }))
+);
+
+  return {
+    users: usersWithFriendStatus,
+    pagination: {
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalUsers / limit),
+      hasMore: skip + users.length < totalUsers,
+    },
+  };
+};
+
+
 export const getUserProfileService = async (currentUserId, targetUserId) => {
   const currentUserIdStr = currentUserId.toString();
   const targetUserIdStr = targetUserId.toString();

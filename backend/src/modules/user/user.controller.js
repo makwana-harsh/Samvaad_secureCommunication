@@ -1,5 +1,5 @@
-import { getProfileSchema, unfriendSchema } from "./user.validation.js";
-import { getUserProfileService, unfriendUserService } from "./user.service.js";
+import { getProfileSchema, unfriendSchema, searchMinimalUsersSchema } from "./user.validation.js";
+import { getUserProfileService, unfriendUserService, searchMinimalUsersService } from "./user.service.js";
 
 export const getUserProfile = async (req, res) => {
     try {
@@ -19,6 +19,24 @@ export const getUserProfile = async (req, res) => {
         }
         return res.status(500).json({ message: error.message || "Failed to fetch profile" });
     }
+};
+
+export const searchMinimalUsers = async (req, res) => {
+  try {
+    const currentUserId = req.user.id; // Extracted from verifyJWT
+    const { search = "", page = 1, limit = 8 } = searchMinimalUsersSchema.parse(req.query);
+
+    const data = await searchMinimalUsersService(
+      currentUserId,
+      search,
+      Number(page),
+      Number(limit)
+    );
+
+    return res.status(200).json({ success: true, ...data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 export const unfriendUser = async (req, res) => {

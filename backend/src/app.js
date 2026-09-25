@@ -11,6 +11,7 @@ import discoverRoutes from './modules/discover/discover.routes.js';
 import userRoutes from "./modules/user/user.routes.js";
 import requestRoutes from "./modules/request/request.routes.js";
 import groupRoutes from "./modules/group/group.routes.js";
+import conversationRoutes from "./modules/conversation/conversation.routes.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/discover', discoverRoutes);
 app.use('/api/users', userRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/groups", groupRoutes);
+app.use("/api/conversations", conversationRoutes)
 
 app.use(errorHandlerMiddleware);
 

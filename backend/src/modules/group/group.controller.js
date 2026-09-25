@@ -1,6 +1,9 @@
-import { getGroupDetailsSchema, joinGroupSchema, leaveGroupSchema, inviteUserSchema, groupInvitationActionSchema} from "./group.validation.js";
+import { getGroupDetailsSchema, joinGroupSchema, leaveGroupSchema, inviteUserSchema, groupInvitationActionSchema, createGroupSchema} from "./group.validation.js";
 
-import { getGroupDetailsService, joinGroupService, leaveGroupService, inviteUserService, acceptInvitationService, rejectInvitationService} from "./group.service.js";
+import { getGroupDetailsService, joinGroupService, leaveGroupService, inviteUserService, acceptInvitationService, rejectInvitationService, createGroupService} from "./group.service.js";
+
+import { uploadGroupAvatar } from "../../utils/cloudinary.js";
+import Group from "../../models/Group.model.js";
 
 const getUserId = (req) => req.user.id || req.user._id;
 
@@ -17,6 +20,55 @@ const handleError = (res, error, fallbackMessage) => {
         message: error.message || fallbackMessage,
     });
 };
+
+
+export const createGroup = async (req, res) => {
+    try {
+        const validatedData = createGroupSchema.parse(req.body);
+
+        const group = await createGroupService(
+            validatedData,
+            getUserId(req)
+        );
+
+        let updatedGroup = group.group;
+
+        if (req.file) {
+            const cloudinaryResult = await uploadGroupAvatar(
+                req.file.buffer,
+                group.group._id
+            );
+
+            updatedGroup = await Group.findByIdAndUpdate(
+                group.group._id,
+                {
+                    avatar: cloudinaryResult.secure_url,
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+        }
+
+        return res.status(201).json({
+            success: true,
+            message: "Group created successfully",
+            data: {
+                ...group,
+                group: updatedGroup,
+            },
+        });
+
+    } catch (error) {
+        return handleError(
+            res,
+            error,
+            "Failed to create group"
+        );
+    }
+};
+
 
 export const getGroupDetails = async (req, res) => {
     try {

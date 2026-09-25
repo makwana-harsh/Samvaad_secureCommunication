@@ -1,0 +1,95 @@
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.user-card:hover {
+  background-color: #f8fafc;
+}
+
+.user-card.active {
+  background-color: #e0e7ff;
+}
+
+.user-avatar-wrapper {
+  position: relative;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.user-card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-online-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background-color: #22c55e;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.user-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-card-header-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-card-time {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.user-card-sub-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.user-card-last-msg {
+  font-size: 0.8rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.user-unread-badge {
+  background-color: #4f46e5;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}

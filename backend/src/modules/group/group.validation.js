@@ -23,3 +23,35 @@ export const groupInvitationActionSchema = z.object({
     groupId: objectId,
     requestId: objectId,
 });
+
+export const createGroupSchema = z.object({
+    groupName: z.string().trim().min(1, "Group name is required"),
+
+    bio: z
+        .string()
+        .trim()
+        .optional()
+        .nullable(),
+
+    avatar: z
+        .string()
+        .optional()
+        .nullable(),
+
+    visibility: z.enum(["public", "private"]),
+
+    memberIds: z.preprocess(
+        (value) => {
+            if (typeof value === "string") {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return value;
+                }
+            }
+
+            return value;
+        },
+        z.array(objectId).min(2, "Select at least 2 members")
+    ),
+});

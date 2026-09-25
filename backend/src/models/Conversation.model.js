@@ -45,7 +45,7 @@ const conversationSchema = new mongoose.Schema(
      */
     privateConversationKey: {
       type: String,
-      default: null,
+      default: undefined,
     },
 
     lastMessage: {
