@@ -94,6 +94,20 @@ export const downloadAttachment = async (req, res) => {
             throw new Error("Failed to fetch attachment");
         }
 
+        // if (!response.ok) {
+        //     console.error(
+        //         "CLOUDINARY FETCH FAILED:",
+        //         response.status,
+        //         response.statusText,
+        //         message.content,
+        //         message.cloudinaryResourceType
+        //     );
+
+        //     throw new Error(
+        //         `Failed to fetch attachment: ${response.status}`
+        //     );
+        // }
+
         res.setHeader(
             "Content-Disposition",
             `attachment; filename="${encodeURIComponent(
@@ -110,6 +124,7 @@ export const downloadAttachment = async (req, res) => {
         return res.send(buffer);
 
     } catch (error) {
+        // console.error("DOWNLOAD ERROR:", error);
         return res.status(500).json({
             success: false,
             message: "Download failed",
