@@ -1,8 +1,18 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
+import User from "../models/User.model.js";
 
-const userSocketMap = new Map(); // userId -> Set(socket.id)
+const userSocketMap = new Map();
 let io = null;
+
+const notifyFriends = async (userId, eventName, data) => {
+    const user = await User.findById(userId).select("friends").lean();
+    if (!user) return;
+
+    (user.friends || []).forEach((friendId) => {
+        emitToUser(friendId, eventName, data);
+    });
+};
 
 export const initSocket = (httpServer) => {
     io = new Server(httpServer, {
@@ -12,44 +22,49 @@ export const initSocket = (httpServer) => {
         },
     });
 
-    // Verify JWT on Handshake
     io.use((socket, next) => {
         const token = socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(" ")[1];
 
-        if (!token) {
-            return next(new Error("Authentication error: No token provided"));
-        }
+        if (!token) return next(new Error("Authentication error: No token provided"));
 
         try {
-            // Uses your exact JWT Access Token Secret
             const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
             socket.userId = decoded.id;
             socket.userName = decoded.userName;
             next();
-        } 
-        catch (err) {
-            return next(new Error("Authentication error: Invalid or expired token"));
+        } catch (err) {
+            next(new Error("Authentication error: Invalid or expired token"));
         }
     });
 
-    io.on("connection", (socket) => {
+    io.on("connection", async (socket) => {
         const userId = socket.userId.toString();
+        const wasOffline = !userSocketMap.has(userId);
 
-        // Map User ID -> Socket ID(s)
-        if (!userSocketMap.has(userId)) {
-            userSocketMap.set(userId, new Set());
-        }
-        
+        if (!userSocketMap.has(userId)) userSocketMap.set(userId, new Set());
         userSocketMap.get(userId).add(socket.id);
 
-        socket.on("disconnect", () => {
-        const userSockets = userSocketMap.get(userId);
-        if (userSockets) {
-            userSockets.delete(socket.id);
-            if (userSockets.size === 0) {
-                userSocketMap.delete(userId);
-            }
+        if (wasOffline) {
+            await User.findByIdAndUpdate(userId, { isOnline: true });
+            await notifyFriends(userId, "user:online", { userId });
         }
+
+        socket.on("disconnect", async () => {
+            const sockets = userSocketMap.get(userId);
+            if (!sockets) return;
+
+            sockets.delete(socket.id);
+            if (sockets.size > 0) return;
+
+            userSocketMap.delete(userId);
+
+            const lastSeen = new Date();
+            await User.findByIdAndUpdate(userId, { isOnline: false, lastSeen });
+
+            await notifyFriends(userId, "user:offline", {
+                userId,
+                lastSeen,
+            });
         });
     });
 
@@ -57,16 +72,19 @@ export const initSocket = (httpServer) => {
 };
 
 export const getIO = () => {
-    if (!io) throw new Error("Socket.io not initialized!");
+    if (!io) throw new Error("Socket.io not initialized");
     return io;
 };
 
-// Emit real-time updates to a specific user
 export const emitToUser = (userId, eventName, data) => {
-    const userSockets = userSocketMap.get(userId.toString());
-    if (userSockets && io) {
-        userSockets.forEach((socketId) => {
-            io.to(socketId).emit(eventName, data);
-        });
-    }
+    const sockets = userSocketMap.get(userId.toString());
+    if (!sockets || !io) return;
+
+    sockets.forEach((socketId) => {
+        io.to(socketId).emit(eventName, data);
+    });
+};
+
+export const isUserOnline = (userId) => {
+    return userSocketMap.has(userId.toString());
 };

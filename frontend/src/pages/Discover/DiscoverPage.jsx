@@ -4,7 +4,7 @@ import React, {
     useCallback,
     useRef,
 } from "react";
-
+import { useNavigate } from "react-router-dom";
 import useDebounce from "../../hooks/useDebounce.js";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll.js";
 
@@ -16,7 +16,12 @@ import { getDiscoverFeedFunct } from "../../api/discover.api.js";
 
 import "../../styles/Discover/DiscoverPage.style.css";
 
+import { joinGroupFunct } from "../../api/group.api.js";
+
 function DiscoverPage() {
+
+    const [joiningGroupId, setJoiningGroupId] = useState(null);
+
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearch = useDebounce(
         searchTerm,
@@ -46,6 +51,20 @@ function DiscoverPage() {
     pageRef.current = page;
     hasMoreRef.current = hasMore;
     isLoadingRef.current = isLoading;
+
+    const navigate = useNavigate();
+
+    const handleMessage = (user) => {
+        navigate("/conversations", {
+            state: {
+                openUserId: user._id,
+                conversationTab:
+                    user.relationshipStatus === "friend"
+                        ? "friends"
+                        : "temporary",
+            },
+        });
+    };
 
     /*
      * Prevent background page scrolling while modal
@@ -282,6 +301,47 @@ function DiscoverPage() {
         setSelectedType(null);
     };
 
+    const handleJoinGroup = async (group) => {
+        if (joiningGroupId) return;
+
+        try {
+            setJoiningGroupId(group._id);
+
+            const res = await joinGroupFunct(group._id);
+
+            setCards((prev) =>
+                prev.map((card) =>
+                    card.cardType === "group" &&
+                    card._id?.toString() === group._id.toString()
+                        ? {
+                            ...card,
+                            isMember: true,
+                            conversationId: res.data.conversationId,
+                            membersCount: (card.membersCount || 0) + 1,
+                        }
+                        : card
+                )
+            );
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setJoiningGroupId(null);
+        }
+    };
+
+    const handleGroupMessage = (group) => {
+        navigate("/conversations", {
+            state: {
+                openGroup: {
+                    groupId: group._id,
+                    conversationId: group.conversationId,
+                    groupName: group.groupName,
+                    avatar: group.avatar,
+                },
+            },
+        });
+    };
+
     return (
         <div className="discover-container">
             <div className="discover-search-sticky-container">
@@ -321,10 +381,14 @@ function DiscoverPage() {
                         "user" ? (
                             <UserCard
                                 user={card}
+                                onMessage={handleMessage}
                             />
                         ) : (
                             <GroupCard
                                 group={card}
+                                onJoin={handleJoinGroup}
+                                onMessage={handleGroupMessage}
+                                joining={joiningGroupId === card._id}
                             />
                         )}
                     </div>

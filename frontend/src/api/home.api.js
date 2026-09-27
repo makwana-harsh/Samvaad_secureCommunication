@@ -9,3 +9,8 @@ export const updateUserProfileFunct = async (profileData) => {
   const response = await api.put("/home/profile/edit", profileData);
   return response.data;
 };
+
+export const getPendingRequestsFunct = async () => {
+    const response = await api.get("/requests/pending");
+    return response.data;
+};

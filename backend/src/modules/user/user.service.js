@@ -55,16 +55,11 @@ export const getUserProfileService = async (currentUserId, targetUserId) => {
   const canViewFullDetails = isSelf || isFriend;
 
   const userGroups = await Group.find({ members: targetUserId })
-    .select("groupName visibility")
+    .select("_id groupName bio avatar visibility")
     .lean();
 
-  const publicGroupNames = userGroups
-    .filter((g) => g.visibility === "public")
-    .map((g) => g.groupName);
-
-  const privateGroupNames = userGroups
-    .filter((g) => g.visibility === "private")
-    .map((g) => g.groupName);
+  const publicGroups = userGroups.filter((g) => g.visibility === "public");
+  const privateGroups = userGroups.filter((g) => g.visibility === "private");
 
   return {
     _id: targetUser._id,
@@ -79,13 +74,58 @@ export const getUserProfileService = async (currentUserId, targetUserId) => {
     friendsCount: (targetUser.friends || []).length,
 
     friends: canViewFullDetails ? targetUser.friends : [],
-    publicGroups: publicGroupNames,
-    privateGroups: canViewFullDetails ? privateGroupNames : [],
+    publicGroups,
+    privateGroups: canViewFullDetails ? privateGroups : [],
 
     mobileNo: canViewFullDetails ? targetUser.mobileNo : null,
     location: canViewFullDetails ? targetUser.location : null,
   };
 };
+
+export const searchUsersService = async (currentUserId, search, page, limit) => {
+    const currentUser = await User.findById(currentUserId).select("friends").lean();
+    if (!currentUser) throw new Error("User not found");
+
+    const query = {
+        _id: { $ne: currentUserId },
+    };
+
+    if (search) {
+        const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        query.userName = { $regex: safeSearch, $options: "i" };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+        User.find(query)
+            .select("_id userName fullName avatar")
+            .sort({ userName: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean(),
+        User.countDocuments(query),
+    ]);
+
+    const friendIds = new Set(
+        (currentUser.friends || []).map((id) => id.toString())
+    );
+
+    return {
+        users: users.map((user) => ({
+            ...user,
+            isFriend: friendIds.has(user._id.toString()),
+        })),
+        pagination: {
+            currentPage: page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+            hasMore: page * limit < total,
+        },
+    };
+};
+
 
 export const unfriendUserService = async (currentUserId, targetUserId) => {
   const currentUserIdObj = new mongoose.Types.ObjectId(currentUserId);

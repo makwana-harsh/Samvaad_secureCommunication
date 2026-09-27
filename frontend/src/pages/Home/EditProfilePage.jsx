@@ -8,6 +8,7 @@ import {
 
 import { useAuth } from "../../context/AuthContext";
 import defaultAvatar from "../../assets/default_avatar.avif";
+import defaultGroupAvatar from "../../assets/group_default_profile_pic.png";
 
 import "../../styles/Home/EditProfilePage.style.css";
 
@@ -42,6 +43,9 @@ const formatProfileData = (userData) => ({
   avatar: userData?.avatar || null,
 });
 
+
+
+
 // ----------------------------------------------------------------------
 // COMPONENT IMPLEMENTATION
 // ----------------------------------------------------------------------
@@ -64,6 +68,9 @@ function EditProfilePage({ isEditMode = false }) {
   const [previewAvatar, setPreviewAvatar] = useState(defaultAvatar);
   const [showImageModal, setShowImageModal] = useState(false);
 
+  const [friends, setFriends] = useState([]);
+  const [joinedGroups, setJoinedGroups] = useState([]);
+
   // --------------------------------------------------------------------
   // PROFILE FETCHING
   // --------------------------------------------------------------------
@@ -76,6 +83,8 @@ function EditProfilePage({ isEditMode = false }) {
         setLoading(true);
         const response = await getUserProfileFunct();
         const userData = response?.user || response;
+        setFriends(userData?.friends || []);
+        setJoinedGroups(userData?.joinedGroups || []);
 
         if (!isMounted) return;
 
@@ -96,6 +105,15 @@ function EditProfilePage({ isEditMode = false }) {
       isMounted = false;
     };
   }, []);
+
+
+  const handleCopy = async (text) => {
+      try {
+          await navigator.clipboard.writeText(text);
+      } catch (error) {
+          console.error("Copy failed:", error);
+      }
+  };
 
   // --------------------------------------------------------------------
   // VALIDATION LOGIC
@@ -224,13 +242,15 @@ function EditProfilePage({ isEditMode = false }) {
       setPreviewAvatar(updatedFormData.avatar || defaultAvatar);
 
       navigate("/home/profile");
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Profile update failed:", error);
       alert(
         error?.response?.data?.message ||
           "Failed to update profile. Please try again."
       );
-    } finally {
+    } 
+    finally {
       setSaving(false);
     }
   };
@@ -445,6 +465,56 @@ function EditProfilePage({ isEditMode = false }) {
             </div>
           )}
         </form>
+          <div className="profile-connections">
+            <h3>Friends</h3>
+
+            {friends.length === 0 ? (
+                <p>No friends</p>
+            ) : (
+                friends.map((friend) => (
+                    <div className="profile-connection-card" key={friend._id}>
+                        <img src={friend.avatar || defaultAvatar} alt="" />
+
+                        <span>@{friend.userName}</span>
+
+                        <button
+                            type="button"
+                            onClick={() => handleCopy(friend.userName)}
+                        >
+                            Copy
+                        </button>
+                    </div>
+                ))
+            )}
+
+            <h3>Joined Groups</h3>
+
+            {joinedGroups.length === 0 ? (
+                <p>No joined groups</p>
+            ) : (
+                joinedGroups.map((group) => (
+                    <div className="profile-connection-card" key={group._id}>
+                        <img
+                            src={group.avatar || defaultGroupAvatar}
+                            alt=""
+                        />
+
+                        <div className="profile-connection-name">
+                            <span>{group.groupName}</span>
+                            <small>{group.visibility}</small>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => handleCopy(group.groupName)}
+                        >
+                            Copy
+                        </button>
+                    </div>
+                ))
+            )}
+        </div>
+
       </div>
 
       {/* Image Preview Modal */}

@@ -23,3 +23,19 @@ export const groupInvitationActionSchema = z.object({
     groupId: objectId,
     requestId: objectId,
 });
+export const createGroupSchema = z.object({
+    groupName: z.string().trim().min(1, "Group name is required").max(100),
+    bio: z.string().trim().max(500).optional().default(""),
+    visibility: z.enum(["public", "private"]),
+    memberIds: z.array(objectId).min(2, "Select at least two users"),
+});
+
+export const updateGroupSchema = z.object({
+    groupId: objectId,
+    bio: z.string().trim().max(500).optional(),
+});
+
+export const removeGroupMemberSchema = z.object({
+    groupId: objectId,
+    userId: objectId,
+});

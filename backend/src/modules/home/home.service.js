@@ -1,7 +1,10 @@
 import User from "../../models/User.model.js";
 
 export const fetchUserProfileService = async (userId) => {
-    return await User.findById(userId).select("-password");
+    return await User.findById(userId)
+        .select("-password")
+        .populate("friends", "_id userName avatar")
+        .populate("joinedGroups", "_id groupName avatar visibility");
 };
 
 export const updateUserProfileService = async (userId, updateData) => {

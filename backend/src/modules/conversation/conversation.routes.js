@@ -1,10 +1,21 @@
 import { Router } from "express";
-import { getConversations } from "./conversation.controller.js";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import {
+    getConversations,
+    getOrCreatePrivateConversation,
+    getOnlineFriends,
+} from "./conversation.controller.js";
 
 const router = Router();
 
-// Route: GET /api/conversations?tab=friends&search=rahul&page=1&limit=15
+router.get("/online-friends", verifyJWT, getOnlineFriends);
+
 router.get("/", verifyJWT, getConversations);
+
+router.post(
+    "/private/:targetUserId",
+    verifyJWT,
+    getOrCreatePrivateConversation
+);
 
 export default router;

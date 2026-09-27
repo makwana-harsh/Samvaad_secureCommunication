@@ -1,14 +1,27 @@
-import React,{ useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getUserProfileFunct } from "../../api/home.api";
 import "../../styles/Home/HomePage.style.css";
 
+import OnlineFriendsContainer from "./OnlineFriendsContainer.jsx";
+import RequestContainer from "./RequestContainer.jsx";
+import RequestDetails from "./RequestDetails.jsx";
 import defaultAvatar from "../../assets/default_avatar.avif";
 
 function HomePage() {
     const { user,setUser } = useAuth();
     const navigate = useNavigate();
+
+    const [selectedRequest, setSelectedRequest] = React.useState(null);
+
+    const handleRequestRemoved = useCallback((requestId) => {
+        setSelectedRequest((prev) =>
+            prev?.requestId?.toString() === requestId?.toString()
+                ? null
+                : prev
+        );
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -76,9 +89,20 @@ function HomePage() {
 
             {/* End Section (Active Cards & Requests) */}
             <div className="HomePage_end_section">
-                {/* We will implement active users & request list here next */}
+                <OnlineFriendsContainer />
+                <RequestContainer
+                    onSelect={setSelectedRequest}
+                    onRequestRemoved={handleRequestRemoved}
+                />
             </div>
             
+            {selectedRequest && (
+                <RequestDetails
+                    request={selectedRequest}
+                    onClose={() => setSelectedRequest(null)}
+                />
+            )}
+
         </div>
     );
 }

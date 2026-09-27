@@ -19,3 +19,8 @@ export const rejectFriendRequestFunct = async (requestId) => {
   const response = await api.post("/requests/reject", { requestId });
   return response.data;
 };
+
+export const getPendingRequestsFunct = async () => {
+    const response = await api.get("/requests/pending");
+    return response.data;
+};

@@ -46,6 +46,7 @@ const conversationSchema = new mongoose.Schema(
     privateConversationKey: {
       type: String,
       default: null,
+      sparse: true,
     },
 
     lastMessage: {
@@ -108,15 +109,15 @@ conversationSchema.index({
  * sparse allows multiple documents where
  * privateConversationKey is null.
  */
-conversationSchema.index(
-  {
-    privateConversationKey: 1,
-  },
-  {
-    unique: true,
-    sparse: true,
-  }
-);
+// conversationSchema.index(
+//   {
+//     privateConversationKey: 1,
+//   },
+//   {
+//     unique: true,
+//     sparse: true,
+//   }
+// );
 
 const Conversation = mongoose.model(
   "Conversation",

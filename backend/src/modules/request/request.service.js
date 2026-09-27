@@ -227,3 +227,35 @@ export const rejectFriendRequestService = async (
         requestId: requestId.toString(),
     };
 };
+
+export const getPendingRequestsService = async (currentUserId) => {
+    const requests = await Request.find({
+        receiverId: currentUserId,
+        status: "pending",
+    })
+        .sort({ createdAt: -1 })
+        .populate("senderId", "_id userName fullName avatar bio")
+        .populate({
+            path: "groupId",
+            select: "_id groupName bio avatar visibility adminId members",
+            populate: [
+                {
+                    path: "adminId",
+                    select: "_id userName avatar",
+                },
+                {
+                    path: "members",
+                    select: "_id userName avatar",
+                },
+            ],
+        })
+        .lean();
+
+    return requests.map((request) => ({
+        requestId: request._id,
+        type: request.type,
+        createdAt: request.createdAt,
+        sender: request.senderId,
+        group: request.groupId || null,
+    }));
+};

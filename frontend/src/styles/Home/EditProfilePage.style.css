@@ -158,3 +158,49 @@
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
+
+.profile-connections {
+    margin-top: 2rem;
+}
+
+.profile-connections h3 {
+    margin: 1.5rem 0 0.8rem;
+}
+
+.profile-connection-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-connection-card img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-connection-card > span,
+.profile-connection-name {
+    flex: 1;
+}
+
+.profile-connection-name {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-connection-name small {
+    color: #6b7280;
+    text-transform: capitalize;
+}
+
+.profile-connection-card button {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}

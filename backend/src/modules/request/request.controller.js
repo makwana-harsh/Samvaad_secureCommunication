@@ -10,6 +10,7 @@ import {
   cancelFriendRequestService,
   acceptFriendRequestService,
   rejectFriendRequestService,
+  getPendingRequestsService,
 } from "./request.service.js";
 
 export const sendRequest = async (req, res) => {
@@ -89,4 +90,21 @@ export const rejectRequest = async (req, res) => {
     }
     return res.status(400).json({ message: error.message || "Failed to reject request" });
   }
+};
+
+export const getPendingRequests = async (req, res) => {
+    try {
+        const currentUserId = req.user.id || req.user._id;
+        const requests = await getPendingRequestsService(currentUserId);
+
+        return res.status(200).json({
+            success: true,
+            data: requests,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message || "Failed to fetch requests",
+        });
+    }
 };

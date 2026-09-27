@@ -26,6 +26,20 @@ const messageSchema = new mongoose.Schema(
             type: String,
             default: null,
         },
+        mimeType: {
+            type: String,
+            default: null,
+        },
+
+        fileSize: {
+            type: Number,
+            default: null,
+        },
+
+        thumbnailUrl: {
+            type: String,
+            default: null,
+        },
         cloudinaryPublicId: {
             type: String,
             default: null,

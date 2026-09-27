@@ -105,3 +105,42 @@ export const deleteChatMessageAttachment = async (
     invalidate: true,
   });
 };
+
+export const generateChatAttachmentPreview = (publicId,resourceType) => {
+  if (!publicId) return null;
+
+  // Blurred lightweight image preview
+  if (resourceType === "image") {
+    return cloudinary.url(publicId, {
+      resource_type: "image",
+      transformation: [
+        {
+          width: 400,
+          crop: "limit",
+          quality: "auto:low",
+          effect: "blur:800",
+        },
+      ],
+      secure: true,
+    });
+  }
+
+  // Thumbnail from video frame
+  if (resourceType === "video") {
+    return cloudinary.url(publicId, {
+      resource_type: "video",
+      format: "jpg",
+      transformation: [
+        {
+          start_offset: "1",
+          width: 500,
+          crop: "limit",
+          quality: "auto",
+        },
+      ],
+      secure: true,
+    });
+  }
+
+  return null;
+};

@@ -5,11 +5,12 @@ import { sendFriendRequestFunct, cancelFriendRequestFunct, acceptFriendRequestFu
 import "../../styles/Discover/DetailViewModal.style.css";
 import defaultAvatar from "../../assets/default_avatar.avif";
 import group_default_profile_pic from "../../assets/group_default_profile_pic.png";
+import { getGroupDetailsFunct } from "../../api/group.api";
 
 function DetailViewModal({ data: initialData, type, onClose, onDataUpdate }) {
     const socket = useSocket();
     const [data, setData] = useState(initialData);
-    const [loading, setLoading] = useState(type === "user");
+    const [loading, setLoading] = useState(true);
     const [enlargedImage, setEnlargedImage] = useState(null);
     const [copiedId, setCopiedId] = useState(null);
     const [actionLoading, setActionLoading] = useState(false);
@@ -27,46 +28,52 @@ function DetailViewModal({ data: initialData, type, onClose, onDataUpdate }) {
     useEffect(() => {
         let isMounted = true;
 
-        const fetchFullProfile = async () => {
-            if (type !== "user" || !initialData?._id) {
-                setData(initialData);
-                dataRef.current = initialData;
-                setLoading(false);
-                return;
-            }
+        const fetchFullDetails = async () => {
+            if (!initialData?._id) return;
 
             try {
                 setLoading(true);
-                const res = await getUserProfileFunct(initialData._id);
-                const fullProfile = res?.data || res;
 
-                if (!isMounted || !fullProfile) return;
+                const res =
+                    type === "user"
+                        ? await getUserProfileFunct(initialData._id)
+                        : await getGroupDetailsFunct(initialData._id);
+
+                const fullData = res?.data || res;
+
+                if (!isMounted || !fullData) return;
 
                 const updated = {
                     ...initialData,
-                    ...fullProfile,
-                    relationshipStatus: fullProfile.relationshipStatus || initialData.relationshipStatus || "none",
+                    ...fullData,
                 };
+
+                if (type === "user") {
+                    updated.relationshipStatus =
+                        fullData.relationshipStatus ||
+                        initialData.relationshipStatus ||
+                        "none";
+                }
 
                 dataRef.current = updated;
                 setData(updated);
-                onDataUpdate?.(updated);
-            } catch (err) {
-                if (isMounted) {
-                    const updated = {
-                        ...initialData,
-                        relationshipStatus: initialData.relationshipStatus || "none",
-                    };
 
-                    dataRef.current = updated;
-                    setData(updated);
+                if (type === "user") {
+                    onDataUpdate?.(updated);
+                }
+            } catch (err) {
+                console.error("Failed to load details:", err);
+
+                if (isMounted) {
+                    setData(initialData);
+                    dataRef.current = initialData;
                 }
             } finally {
                 if (isMounted) setLoading(false);
             }
         };
 
-        fetchFullProfile();
+        fetchFullDetails();
 
         return () => {
             isMounted = false;
@@ -414,24 +421,72 @@ function DetailViewModal({ data: initialData, type, onClose, onDataUpdate }) {
                         {data.publicGroups?.length > 0 && (
                             <div className="list-section">
                                 <h4>Joined Public Groups</h4>
-                                <div className="chip-container">
-                                    {data.publicGroups.map((groupName, idx) => (
-                                        <span key={idx} className="simple-chip">{groupName}</span>
+
+                                <div className="user-cards-grid">
+                                    {data.publicGroups.map((group, index) => (
+                                        <div key={group._id || index} className="mini-user-card">
+                                            <img
+                                                src={group.avatar || group_default_profile_pic}
+                                                alt={group.groupName}
+                                                className="mini-avatar clickable-avatar"
+                                                onClick={() =>
+                                                    openImageModal(group.avatar || group_default_profile_pic)
+                                                }
+                                            />
+
+                                            <span className="mini-username">
+                                                {group.groupName || "Unnamed Group"}
+                                            </span>
+
+                                            <button
+                                                className="copy-btn"
+                                                onClick={() =>
+                                                    copyToClipboard(group.groupName || "", `public-${group._id}`)
+                                                }
+                                            >
+                                                {copiedId === `public-${group._id}` ? "Copied!" : "Copy"}
+                                            </button>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        {data.privateGroups?.length > 0 && (data.relationshipStatus === "friend" || data.relationshipStatus === "self") && (
-                            <div className="list-section">
-                                <h4>Joined Private Groups</h4>
-                                <div className="chip-container">
-                                    {data.privateGroups.map((groupName, idx) => (
-                                        <span key={idx} className="simple-chip private">{groupName}</span>
-                                    ))}
+                        {data.privateGroups?.length > 0 &&
+                            (data.relationshipStatus === "friend" ||
+                                data.relationshipStatus === "self") && (
+                                <div className="list-section">
+                                    <h4>Joined Private Groups</h4>
+
+                                    <div className="user-cards-grid">
+                                        {data.privateGroups.map((group, index) => (
+                                            <div key={group._id || index} className="mini-user-card">
+                                                <img
+                                                    src={group.avatar || group_default_profile_pic}
+                                                    alt={group.groupName}
+                                                    className="mini-avatar clickable-avatar"
+                                                    onClick={() =>
+                                                        openImageModal(group.avatar || group_default_profile_pic)
+                                                    }
+                                                />
+
+                                                <span className="mini-username">
+                                                    {group.groupName || "Unnamed Group"}
+                                                </span>
+
+                                                <button
+                                                    className="copy-btn"
+                                                    onClick={() =>
+                                                        copyToClipboard(group.groupName || "", `private-${group._id}`)
+                                                    }
+                                                >
+                                                    {copiedId === `private-${group._id}` ? "Copied!" : "Copy"}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
                         {data.friends?.length > 0 && (
                             <div className="list-section">
