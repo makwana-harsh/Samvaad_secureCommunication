@@ -14,9 +14,12 @@ import "../../styles/Conversations/ConversationPage.style.css";
 import MessageImage from "../../components/MessageImage.jsx";
 
 import { downloadAttachmentApi } from "../../api/conversation.api";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ConversationPage() {
     const socket = useSocket();
+    const { user } = useAuth();
+const myId = (user?._id || user?.id)?.toString();
     const [showChatInfo, setShowChatInfo] = useState(false);
 
     const location = useLocation();
@@ -512,7 +515,9 @@ export default function ConversationPage() {
                         <section className="messages-container">
                             {messages.map((message) => (
                                 <div
-                                    className={`message ${message.messageType === "system" ? "system-message" : ""}`}
+                                    className={`message ${message.messageType === "system" ? "system-message" : ""} ${
+                                        message.senderId?._id?.toString() === myId ? "mine" : ""
+                                    }`}
                                     key={message._id}
                                 >
                                     {message.messageType !== "system" && (

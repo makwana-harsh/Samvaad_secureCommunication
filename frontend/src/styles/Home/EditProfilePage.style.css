@@ -1,206 +1,47 @@
-/* Fullscreen Wrapper (Covers entire screen & Navbar) */
-.edit-profile-page-fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #f9fafb;
-  z-index: 1000;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
+.edit-profile-page-fullscreen{position:fixed;inset:0;width:100vw;height:100vh;background:var(--bg);z-index:1100;overflow-y:auto;display:flex;flex-direction:column;animation:slide-up .35s var(--ease) backwards}
+.edit-page-header{display:flex;align-items:center;justify-content:space-between;padding:1rem clamp(1rem,4vw,2rem);background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.back-btn,.top-edit-btn{background:none;border:0;padding:.4rem .6rem;font-size:.95rem;font-weight:600;color:var(--accent-ink);border-radius:var(--r-sm)}
+.back-btn:hover,.top-edit-btn:hover{background:var(--accent-soft)}
+.edit-profile-content{max-width:600px;width:100%;margin:2rem auto;padding:0 1rem}
 
-.edit-page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-}
+.avatar-wrapper{position:relative;width:130px;height:130px;margin:0 auto 2rem}
+.big-profile-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--surface-2);box-shadow:0 0 0 4px var(--bg),0 0 0 6px var(--accent);cursor:pointer;transition:filter .2s}
+.big-profile-avatar:hover{filter:brightness(.92)}
+.avatar-upload-badge{position:absolute;bottom:0;right:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);border:3px solid var(--bg);border-radius:50%;cursor:pointer;transition:transform .2s var(--ease)}
+.avatar-upload-badge:hover{transform:scale(1.1)}
 
-.back-btn, .top-edit-btn {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #6366f1;
-  cursor: pointer;
-}
+.profile-form{display:flex;flex-direction:column;gap:1.2rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem}
+.form-group label{font-size:.85rem;font-weight:600;color:var(--text-2)}
+.form-group input,.form-group textarea{padding:.75rem;border-radius:var(--r-md);border:1px solid var(--border);font-size:.95rem;background:var(--surface)}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.form-group input:disabled,.form-group textarea:disabled{background:var(--surface-2);color:var(--text-2);border-color:var(--border)}
 
-.edit-profile-content {
-  max-width: 600px;
-  width: 100%;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
+.edit-form-actions{display:flex;gap:1rem;margin-top:1rem}
+.save-btn{flex:1;padding:.75rem;background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r-md);font-weight:600;cursor:pointer;transition:background .2s,transform .15s var(--ease)}
+.save-btn:hover:not(:disabled){background:var(--accent-hover)}
+.save-btn:disabled{opacity:.55;cursor:not-allowed}
+.cancel-btn{flex:1;padding:.75rem;background:transparent;color:var(--text-2);border:1px solid var(--border-strong);border-radius:var(--r-md);font-weight:600;cursor:pointer}
+.cancel-btn:hover{background:var(--surface-2);color:var(--text)}
 
-/* Avatar Styling */
-.avatar-wrapper {
-  position: relative;
-  width: 130px;
-  height: 130px;
-  margin: 0 auto 2rem auto;
-}
+.image-modal-backdrop{position:fixed;inset:0;width:100vw;height:100vh;background:var(--overlay);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:2000;animation:fade-in .2s ease backwards}
+.image-modal-content img{max-width:85vw;max-height:85vh;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);animation:pop-in .3s var(--ease) backwards}
 
-.big-profile-avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #6366f1;
-  cursor: pointer;
-}
+.profile-connections{margin-top:2rem}
+.profile-connections h3{margin:1.5rem 0 .8rem;font-size:1.05rem}
+.profile-connection-card{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.profile-connection-card img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.profile-connection-card>span,.profile-connection-name{flex:1}
+.profile-connection-name{display:flex;flex-direction:column}
+.profile-connection-name small{color:var(--text-2);text-transform:capitalize}
+.profile-connection-card button{padding:6px 12px;border:1px solid var(--border-strong);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;transition:background .15s}
+.profile-connection-card button:hover{background:var(--surface-2)}
 
-.avatar-upload-badge {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #6366f1;
-  color: #ffffff;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* Form Controls */
-.profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.form-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #4b5563;
-}
-
-.form-group input, .form-group textarea {
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.95rem;
-  background-color: #ffffff;
-}
-
-.form-group input:disabled, .form-group textarea:disabled {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  border-color: #e5e7eb;
-}
-
-/* Action Buttons */
-.edit-form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.save-btn {
-  flex: 1;
-  padding: 0.75rem;
-  background-color: #6366f1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.save-btn:disabled {
-  background-color: #a5b4fc;
-  cursor: not-allowed;
-}
-
-.cancel-btn {
-  flex: 1;
-  padding: 0.75rem;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Lightbox Modal */
-.image-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.image-modal-content img {
-    max-width: 85vw;
-    max-height: 85vh;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.profile-connections {
-    margin-top: 2rem;
-}
-
-.profile-connections h3 {
-    margin: 1.5rem 0 0.8rem;
-}
-
-.profile-connection-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.profile-connection-card img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.profile-connection-card > span,
-.profile-connection-name {
-    flex: 1;
-}
-
-.profile-connection-name {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-connection-name small {
-    color: #6b7280;
-    text-transform: capitalize;
-}
-
-.profile-connection-card button {
-    padding: 6px 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-}
+/* ---- additions: classes used in EditProfilePage.jsx ---- */
+.edit-profile-loading{min-height:100vh;display:grid;place-items:center;color:var(--text-2)}
+.edit-page-header h2{margin:0;font-size:1.05rem}
+.read-only-tag{font-weight:400;color:var(--text-3);font-size:.78rem}
+.error-text{color:var(--danger)!important;font-size:.82rem!important}
+.image-modal-content{position:relative}
+.modal-close-btn{position:absolute;top:-14px;right:-14px;width:32px;height:32px;padding:0;display:grid;place-items:center;border-radius:50%;background:var(--surface);color:var(--text);font-size:1.2rem;line-height:1;box-shadow:var(--shadow-md)}
+.profile-connections p{color:var(--text-3);margin:6px 0}

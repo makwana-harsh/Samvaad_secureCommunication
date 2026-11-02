@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { SocketProvider } from './context/SocketContext'
 import App from './App.jsx'
+import "./styles/tokens.css";
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>

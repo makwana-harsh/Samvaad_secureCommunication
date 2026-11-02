@@ -1,55 +1,9 @@
-.register_main_container{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.register_header_section{
-    /* border: 1px solid black; */
-    height: 100px;
-    width: 900px;
-    font-size: 80px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.register_form_section{
-    border: 1px solid black;
-    height: 400px;
-    width: 530px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.register_form_section div{
-    /* border: 1px solid black; */
-    padding: 10px;
-    width: 370px;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.register_form_section div input{
-    font-size: 20px;
-    border: none;
-    border-radius: 6px;
-    background-color: rgb(206, 225, 241);
-    padding: 7px;
-}
-.registerButton{
-    padding: 10px;
-    font-size: 20px;
-    width: 100px;
-    border: none;
-    border-radius: 6px;
-    background-color: rgb(164, 187, 209);
-    cursor: pointer;
-    margin-top: 30px;
-}
+.register_main_container{min-height:100vh;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:32px 24px}
+.register_header_section{height:auto;width:auto;margin:0 0 24px;font-size:2.2rem;font-weight:600;letter-spacing:-.03em;display:block;text-align:center}
+.register_form_section{width:min(440px,100%);height:auto;display:flex;flex-direction:column;align-items:stretch;gap:16px;padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-md);animation:pop-in .45s var(--ease) backwards}
+.register_form_section div{width:100%;padding:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;font-size:1rem}
+.register_form_section div label{font-size:.85rem;font-weight:600;color:var(--text-2)}
+.register_form_section div input{width:100%;font-size:1rem}
+.registerButton{width:100%;margin-top:6px;padding:.75rem;font-size:1rem;font-weight:600;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--on-accent);cursor:pointer;transition:background .2s,transform .15s var(--ease)}
+.registerButton:hover{background:var(--accent-hover)}
+.registerButton:active{transform:scale(.98)}

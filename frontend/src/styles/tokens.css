@@ -1,0 +1,59 @@
+/* Samvaad design tokens + base. Import ONCE in main.jsx, after any index.css */
+:root{
+  color-scheme:light dark;
+  --bg:#ebe9e5;--surface:#f6f5f2;--surface-2:#e3e0da;--border:#d6d2ca;--border-strong:#bfbab0;
+  --text:#24221f;--text-2:#625d55;--text-3:#8a857b;
+  --accent:#a35a45;--accent-hover:#8e4c39;--accent-soft:#e9d8d0;--accent-ink:#7f3f2c;--on-accent:#fbf6f3;
+  --success:#3f6b53;--success-soft:#dce7de;--danger:#9c3b36;--danger-soft:#f1dedb;--warn:#80611b;--warn-soft:#efe4c8;
+  --overlay:rgba(28,25,21,.5);
+  --shadow-sm:0 1px 2px rgba(30,25,20,.06);
+  --shadow-md:0 10px 30px -12px rgba(30,25,20,.25);
+  --shadow-lg:0 30px 70px -24px rgba(30,25,20,.4);
+  --r-sm:6px;--r-md:10px;--r-lg:16px;
+  --font:"Avenir Next","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --header-h:60px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#1a1917;--surface:#232220;--surface-2:#2d2b28;--border:#3a3733;--border-strong:#4d4943;
+    --text:#ebe8e2;--text-2:#a8a299;--text-3:#7d776d;
+    --accent:#c9806a;--accent-hover:#d79480;--accent-soft:#3a2a24;--accent-ink:#e0a591;--on-accent:#1a1917;
+    --success:#86b596;--success-soft:#26352b;--danger:#d9776f;--danger-soft:#3b2523;--warn:#d1ad5f;--warn-soft:#382f1a;
+    --overlay:rgba(0,0,0,.6);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+    --shadow-md:0 10px 30px -12px rgba(0,0,0,.6);
+    --shadow-lg:0 30px 70px -24px rgba(0,0,0,.8);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+*{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
+body{margin:0;display:block;min-width:320px;background:var(--bg);color:var(--text);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+#root{width:100%;max-width:none;margin:0;padding:0;text-align:left}
+h1,h2,h3,h4{line-height:1.2;letter-spacing:-.01em}
+
+:where(button,input,textarea,select){font:inherit;color:inherit}
+:where(button){cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.5rem .9rem;transition:background .15s,border-color .15s,color .15s,transform .15s var(--ease)}
+:where(button:hover:not(:disabled)){background:var(--surface-2);border-color:var(--border-strong)}
+:where(button:active:not(:disabled)){transform:scale(.97)}
+:where(button:disabled){opacity:.55;cursor:not-allowed}
+:where(input:not([type=checkbox]):not([type=radio]):not([type=file]),textarea,select){background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.6rem .75rem;outline:none;transition:border-color .15s,box-shadow .15s}
+:where(input:not([type=checkbox]):not([type=radio]):not([type=file]),textarea,select):focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+:where(input,textarea)::placeholder{color:var(--text-3)}
+:where(input[type=checkbox]){accent-color:var(--accent)}
+:where(button,a,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes pop-in{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes slide-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 45%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
+
+.skeleton{background:linear-gradient(90deg,var(--surface-2) 30%,var(--surface) 50%,var(--surface-2) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:var(--r-md)}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}

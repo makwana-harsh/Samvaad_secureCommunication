@@ -28,6 +28,7 @@ function GroupCard({ group, onJoin, onMessage, joining }) {
             {group.isMember ? (
                 <button
                     type="button"
+                    className="group-action-btn ghost"
                     onClick={(e) => {
                         e.stopPropagation();
                         onMessage(group);
@@ -38,6 +39,7 @@ function GroupCard({ group, onJoin, onMessage, joining }) {
             ) : (
                 <button
                     type="button"
+                    className="group-action-btn"
                     disabled={joining}
                     onClick={(e) => {
                         e.stopPropagation();

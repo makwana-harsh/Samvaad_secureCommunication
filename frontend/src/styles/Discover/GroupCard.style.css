@@ -1,56 +1,11 @@
-.group-row-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 8px;
-}
-
-.group-row-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #e5e7eb;
-  flex-shrink: 0;
-}
-
-.group-row-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.group-row-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.group-row-title {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0;
-  color: #111827;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.group-row-meta {
-  font-size: 12px;
-  color: #9ca3af;
-  margin-top: 4px;
-}
-
-.badge-group {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 12px;
-  text-transform: uppercase;
-  background: #f0fdf4;
-  color: #16a34a;
-  flex-shrink: 0;
-}
+.group-row-card{display:flex;align-items:center;gap:14px;padding:12px 8px}
+.group-row-avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;background:var(--surface-2);flex-shrink:0}
+.group-row-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.group-row-header{display:flex;align-items:center;gap:8px;min-width:0}
+.group-row-title{font-size:15px;font-weight:600;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.group-row-meta{font-size:12px;color:var(--text-3);margin-top:3px}
+.badge-group{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);flex-shrink:0}
+.group-action-btn{flex-shrink:0;min-width:76px;padding:.4rem .95rem;font-size:.85rem;font-weight:600;border-radius:var(--r-sm);cursor:pointer;background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);transition:background .15s,color .15s,transform .15s var(--ease)}
+.group-action-btn:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
+.group-action-btn.ghost{background:transparent;color:var(--accent-ink)}
+.group-action-btn.ghost:hover:not(:disabled){background:var(--accent);color:var(--on-accent)}
