@@ -38,12 +38,12 @@
 .status-badge-friend{background:var(--success-soft);color:var(--success)}
 .action-btn-group{display:flex;align-items:center;gap:12px}
 .btn-action-primary,.btn-action-success{border:0;padding:8px 18px;border-radius:var(--r-sm);font-weight:600;font-size:.9rem;cursor:pointer;transition:background .2s,transform .15s var(--ease)}
-.btn-action-primary{background:var(--accent);color:var(--on-accent)}
-.btn-action-primary:hover:not(:disabled){background:var(--accent-hover)}
-.btn-action-success{background:var(--success);color:var(--surface)}
+.btn-action-primary{background:var(--accent-grad);color:var(--on-accent)}
+.btn-action-primary:hover:not(:disabled){filter:brightness(1.08)}
+.btn-action-success{background:var(--success);color:var(--on-accent)}
 .btn-action-success:hover:not(:disabled){filter:brightness(1.1)}
 .btn-action-secondary{background:transparent;color:var(--danger);border:1px solid var(--danger);padding:8px 16px;border-radius:var(--r-sm);font-weight:600;font-size:.85rem;cursor:pointer;white-space:nowrap;transition:all .2s}
-.btn-action-secondary:hover:not(:disabled){background:var(--danger);color:var(--surface)}
+.btn-action-secondary:hover:not(:disabled){background:var(--danger);color:var(--on-accent)}
 .btn-action-secondary:disabled,.btn-action-primary:disabled,.btn-action-success:disabled{opacity:.55;cursor:not-allowed}
 
 .details-header-card h3{margin:0;font-size:1.3rem;letter-spacing:-.02em}

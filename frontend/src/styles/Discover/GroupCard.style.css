@@ -1,11 +1,9 @@
-.group-row-card{display:flex;align-items:center;gap:14px;padding:12px 8px}
-.group-row-avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;background:var(--surface-2);flex-shrink:0}
-.group-row-info{flex:1;min-width:0;display:flex;flex-direction:column}
-.group-row-header{display:flex;align-items:center;gap:8px;min-width:0}
-.group-row-title{font-size:15px;font-weight:600;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.group-row-meta{font-size:12px;color:var(--text-3);margin-top:3px}
-.badge-group{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);flex-shrink:0}
-.group-action-btn{flex-shrink:0;min-width:76px;padding:.4rem .95rem;font-size:.85rem;font-weight:600;border-radius:var(--r-sm);cursor:pointer;background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);transition:background .15s,color .15s,transform .15s var(--ease)}
-.group-action-btn:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
-.group-action-btn.ghost{background:transparent;color:var(--accent-ink)}
-.group-action-btn.ghost:hover:not(:disabled){background:var(--accent);color:var(--on-accent)}
+.gc-avatar{flex-shrink:0;width:62px;height:62px;padding:3px;border-radius:22px;background:var(--accent-grad);transition:transform .35s var(--ease)}
+.discover-item-wrapper:hover .gc-avatar{transform:scale(1.05) rotate(3deg)}
+.gc-avatar img{width:100%;height:100%;border-radius:19px;object-fit:cover;background:var(--bg);border:2px solid var(--bg)}
+.gc-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.gc-title{display:flex;align-items:center;gap:8px;min-width:0}
+.gc-title h4{margin:0;font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc-bio{margin:0;font-size:.85rem;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc-meta{display:inline-flex;align-items:center;gap:6px;margin-top:3px;font-size:.78rem;color:var(--text-3)}
+.gc-spin{width:15px;height:15px;border-color:rgba(255,255,255,.4);border-top-color:currentColor}

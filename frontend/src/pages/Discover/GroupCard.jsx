@@ -1,52 +1,56 @@
 import React from "react";
+import { Check, Globe, MessageCircle, Plus, Users } from "lucide-react";
 import defaultAvatar from "../../assets/group_default_profile_pic.png";
 import "../../styles/Discover/GroupCard.style.css";
 
 function GroupCard({ group, onJoin, onMessage, joining }) {
-    const memberCount =
-        group.membersCount ?? group.members?.length ?? 0;
+    const memberCount = group.membersCount ?? group.members?.length ?? 0;
 
     return (
-        <div className="group-row-card">
-            <img
-                src={group.avatar || defaultAvatar}
-                alt={group.groupName}
-                className="group-row-avatar"
-            />
+        <div className="gc">
+            <div className="gc-avatar">
+                <img src={group.avatar || defaultAvatar} alt={group.groupName} />
+            </div>
 
-            <div className="group-row-info">
-                <div className="group-row-header">
-                    <h4 className="group-row-title">{group.groupName}</h4>
-                    <span className="badge-group">Public</span>
+            <div className="gc-body">
+                <div className="gc-title">
+                    <h4>{group.groupName}</h4>
+                    <span className="chip chip-public"><Globe size={11} /> Public</span>
                 </div>
 
-                <span className="group-row-meta">
-                    {memberCount} {memberCount === 1 ? "Member" : "Members"}
+                {group.bio && <p className="gc-bio">{group.bio}</p>}
+
+                <span className="gc-meta">
+                    <Users size={13} /> {memberCount} {memberCount === 1 ? "member" : "members"}
+                    {group.isMember && (
+                        <span className="chip chip-joined"><Check size={11} strokeWidth={3} /> Joined</span>
+                    )}
                 </span>
             </div>
 
             {group.isMember ? (
                 <button
                     type="button"
-                    className="group-action-btn ghost"
+                    className="pill-btn pill-btn--ghost"
                     onClick={(e) => {
                         e.stopPropagation();
                         onMessage(group);
                     }}
                 >
-                    Message
+                    <MessageCircle size={15} /> <span className="uc-btn-label">Message</span>
                 </button>
             ) : (
                 <button
                     type="button"
-                    className="group-action-btn"
+                    className="pill-btn"
                     disabled={joining}
                     onClick={(e) => {
                         e.stopPropagation();
                         onJoin(group);
                     }}
                 >
-                    {joining ? "Joining..." : "Join"}
+                    {joining ? <span className="spinner gc-spin" /> : <Plus size={15} strokeWidth={2.6} />}
+                    <span className="uc-btn-label">{joining ? "Joining" : "Join"}</span>
                 </button>
             )}
         </div>

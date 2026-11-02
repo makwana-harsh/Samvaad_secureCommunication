@@ -2,5 +2,5 @@
 .not-found-container h1{margin:0;font-size:clamp(5rem,18vw,9rem);font-weight:700;letter-spacing:-.06em;line-height:.9;color:var(--accent)}
 .not-found-container h2{margin:12px 0 6px;font-size:1.5rem}
 .not-found-container p{margin:0 0 24px;color:var(--text-2)}
-.home-btn{background:var(--accent);color:var(--on-accent);border:0;padding:.7rem 1.4rem;border-radius:var(--r-md);font-weight:600}
-.home-btn:hover{background:var(--accent-hover)}
+.home-btn{background:var(--accent-grad);color:var(--on-accent);border:0;padding:.7rem 1.4rem;border-radius:var(--r-md);font-weight:600}
+.home-btn:hover{filter:brightness(1.08)}

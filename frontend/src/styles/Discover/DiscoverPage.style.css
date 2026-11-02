@@ -1,18 +1,26 @@
-.discover-container{width:100%;max-width:680px;margin:0 auto;padding:0 16px 40px}
-.discover-search-sticky-container{position:sticky;top:var(--header-h);z-index:90;width:100%;height:64px}
-.discover-search-wrapper{position:absolute;inset:0 0 auto 0;background:var(--bg);padding:10px 0;box-shadow:0 1px 0 var(--border);transform:translateY(0);opacity:1;transition:transform .3s var(--ease),opacity .2s ease}
+.discover-container{width:100%;max-width:720px;margin:0 auto;padding:0 16px 48px}
+.discover-search-sticky-container{position:sticky;top:var(--header-h);z-index:90;width:100%;height:72px}
+.discover-search-wrapper{position:absolute;inset:0 0 auto 0;padding:14px 0 10px;background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(14px);transform:translateY(0);opacity:1;transition:transform .35s var(--ease),opacity .2s ease}
 .discover-search-wrapper.search-hidden{transform:translateY(-100%);opacity:0;pointer-events:none}
-.discover-search-input{width:100%;height:44px;padding:0 16px 0 42px;border-radius:22px;border:1px solid var(--border);background-color:var(--surface);font-size:14px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a857b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:16px center}
-.discover-search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.discover-search-input{width:100%;height:48px;padding:0 18px 0 46px;border-radius:24px;border:1px solid var(--border);background-color:var(--surface);backdrop-filter:blur(16px);box-shadow:var(--shadow-sm);font-size:14.5px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .25s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='%23978c82' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:18px center}
+.discover-search-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
 
-.discover-feed-list{display:flex;flex-direction:column;width:100%;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
-.discover-feed-list:empty{display:none}
-.discover-item-wrapper{width:100%;border-bottom:1px solid var(--border);padding:0 8px;cursor:pointer;transition:background-color .15s,box-shadow .2s var(--ease)}
-.discover-item-wrapper:last-child{border-bottom:0}
-.discover-item-wrapper:hover{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--accent)}
-.discover-item-wrapper:active{background:var(--border)}
+.discover-feed-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.discover-item-wrapper{cursor:pointer;border-radius:20px}
 
-.discover-skeleton-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-.discover-skeleton-row{height:74px}
+/* shared card base for UserCard + GroupCard */
+.uc,.gc{position:relative;display:flex;align-items:center;gap:16px;padding:16px 18px;overflow:hidden;background:var(--surface);backdrop-filter:blur(16px) saturate(1.3);border:1px solid var(--border);border-radius:20px;transition:border-color .25s,box-shadow .3s var(--ease)}
+.uc::before,.gc::before{content:"";position:absolute;inset:0;background:radial-gradient(260px 130px at 0% 0%,var(--card-tint),transparent 70%);pointer-events:none}
+.uc>*,.gc>*{position:relative}
+.uc{--card-tint:var(--surface-2)}
+.uc-friend{--card-tint:var(--success-soft)}
+.gc{--card-tint:var(--accent-soft)}
+.discover-item-wrapper:hover .uc,.discover-item-wrapper:hover .gc{border-color:var(--border-strong);box-shadow:var(--shadow-md)}
+.uc-friend{border-color:color-mix(in srgb,var(--success) 30%,var(--border))}
+.uc-btn-label{white-space:nowrap}
+@media (max-width:480px){.uc-btn-label{display:none}.uc,.gc{gap:12px;padding:14px}}
+
+.discover-skeleton-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.discover-skeleton-row{height:92px;border-radius:20px}
 .discover-empty-state{display:flex;justify-content:center;align-items:center;padding:60px 0;color:var(--text-3);font-size:15px;font-weight:500}
 .discover-loader{display:flex;justify-content:center;align-items:center;min-height:56px;padding:16px 0;color:var(--text-3);font-size:14px}

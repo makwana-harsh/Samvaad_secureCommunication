@@ -1,40 +1,54 @@
-/* Samvaad design tokens + base. Import ONCE in main.jsx, after any index.css */
+/* Samvaad design system. Import once in main.jsx (after index.css). */
 :root{
-  color-scheme:light dark;
-  --bg:#ebe9e5;--surface:#f6f5f2;--surface-2:#e3e0da;--border:#d6d2ca;--border-strong:#bfbab0;
-  --text:#24221f;--text-2:#625d55;--text-3:#8a857b;
-  --accent:#a35a45;--accent-hover:#8e4c39;--accent-soft:#e9d8d0;--accent-ink:#7f3f2c;--on-accent:#fbf6f3;
-  --success:#3f6b53;--success-soft:#dce7de;--danger:#9c3b36;--danger-soft:#f1dedb;--warn:#80611b;--warn-soft:#efe4c8;
-  --overlay:rgba(28,25,21,.5);
-  --shadow-sm:0 1px 2px rgba(30,25,20,.06);
-  --shadow-md:0 10px 30px -12px rgba(30,25,20,.25);
-  --shadow-lg:0 30px 70px -24px rgba(30,25,20,.4);
-  --r-sm:6px;--r-md:10px;--r-lg:16px;
-  --font:"Avenir Next","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+  color-scheme:light;
+  --bg:#f6f1ea;--surface:rgba(255,255,255,.74);--surface-2:rgba(70,45,25,.06);
+  --border:rgba(70,45,25,.11);--border-strong:rgba(70,45,25,.22);
+  --text:#221c17;--text-2:#665c53;--text-3:#978c82;
+  --accent:#c9502f;--accent-hover:#b54527;--accent-grad:linear-gradient(135deg,#d65a38 0%,#e68a4a 100%);
+  --accent-soft:rgba(201,80,47,.11);--accent-ink:#a63e20;--on-accent:#fff;
+  --success:#1f8a7d;--success-soft:rgba(31,138,125,.13);
+  --danger:#c23b34;--danger-soft:rgba(194,59,52,.11);
+  --warn:#9a6a12;--warn-soft:rgba(214,150,30,.16);
+  --overlay:rgba(30,20,12,.45);
+  --glow-1:rgba(240,140,90,.30);--glow-2:rgba(60,160,150,.18);
+  --shadow-sm:0 1px 2px rgba(60,35,15,.06);
+  --shadow-md:0 14px 34px -14px rgba(60,35,15,.28);
+  --shadow-lg:0 30px 70px -28px rgba(60,35,15,.45);
+  --r-sm:8px;--r-md:12px;--r-lg:20px;
+  --font:"Plus Jakarta Sans Variable","Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
   --header-h:60px;
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#1a1917;--surface:#232220;--surface-2:#2d2b28;--border:#3a3733;--border-strong:#4d4943;
-    --text:#ebe8e2;--text-2:#a8a299;--text-3:#7d776d;
-    --accent:#c9806a;--accent-hover:#d79480;--accent-soft:#3a2a24;--accent-ink:#e0a591;--on-accent:#1a1917;
-    --success:#86b596;--success-soft:#26352b;--danger:#d9776f;--danger-soft:#3b2523;--warn:#d1ad5f;--warn-soft:#382f1a;
-    --overlay:rgba(0,0,0,.6);
-    --shadow-sm:0 1px 2px rgba(0,0,0,.3);
-    --shadow-md:0 10px 30px -12px rgba(0,0,0,.6);
-    --shadow-lg:0 30px 70px -24px rgba(0,0,0,.8);
-  }
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c0d11;--surface:rgba(30,31,39,.66);--surface-2:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.09);--border-strong:rgba(255,255,255,.18);
+  --text:#f3efe9;--text-2:#aaa59e;--text-3:#7b776f;
+  --accent:#ff8257;--accent-hover:#ff9570;--accent-grad:linear-gradient(135deg,#ff7a50 0%,#ffa25c 100%);
+  --accent-soft:rgba(255,130,87,.15);--accent-ink:#ffb597;--on-accent:#1b0e08;
+  --success:#4cc3b0;--success-soft:rgba(76,195,176,.15);
+  --danger:#ff7b72;--danger-soft:rgba(255,123,114,.14);
+  --warn:#e6bd63;--warn-soft:rgba(230,189,99,.15);
+  --overlay:rgba(0,0,0,.62);
+  --glow-1:rgba(255,122,80,.20);--glow-2:rgba(60,190,170,.16);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow-md:0 14px 34px -14px rgba(0,0,0,.7);
+  --shadow-lg:0 30px 70px -28px rgba(0,0,0,.85);
 }
 
 *,*::before,*::after{box-sizing:border-box}
 *{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent}
 body{margin:0;display:block;min-width:320px;background:var(--bg);color:var(--text);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased}
 #root{width:100%;max-width:none;margin:0;padding:0;text-align:left}
-h1,h2,h3,h4{line-height:1.2;letter-spacing:-.01em}
+h1,h2,h3,h4{line-height:1.2;letter-spacing:-.015em}
+
+/* ambient glow behind everything */
+body::before{content:"";position:fixed;inset:-8%;z-index:-1;pointer-events:none;will-change:transform;
+  background:radial-gradient(640px 460px at 12% 0%,var(--glow-1),transparent 70%),radial-gradient(560px 460px at 92% 100%,var(--glow-2),transparent 70%);
+  animation:drift 22s ease-in-out infinite alternate}
 
 :where(button,input,textarea,select){font:inherit;color:inherit}
-:where(button){cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.5rem .9rem;transition:background .15s,border-color .15s,color .15s,transform .15s var(--ease)}
+:where(button){cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.5rem .9rem;transition:background .15s,border-color .15s,color .15s,transform .2s var(--ease),box-shadow .25s}
 :where(button:hover:not(:disabled)){background:var(--surface-2);border-color:var(--border-strong)}
 :where(button:active:not(:disabled)){transform:scale(.97)}
 :where(button:disabled){opacity:.55;cursor:not-allowed}
@@ -44,14 +58,40 @@ h1,h2,h3,h4{line-height:1.2;letter-spacing:-.01em}
 :where(input[type=checkbox]){accent-color:var(--accent)}
 :where(button,a,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
+/* glass surfaces */
+:is(.profile-card,.home-request-container,.online-friend-card,.request-details,.create-group,.conversation-sidebar,.chat-header,.message-input,.fullscreen-header,.edit-page-header,.info-grid,.modal-action-bar,.mini-user-card,.chat-info-list){backdrop-filter:blur(16px) saturate(1.3)}
+
+/* shared primitives */
+.pill-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;padding:.5rem 1.05rem;border-radius:999px;border:1px solid transparent;background:var(--accent-grad);color:var(--on-accent);font-weight:700;font-size:.85rem;box-shadow:0 8px 18px -10px var(--accent);transition:transform .25s var(--ease),box-shadow .25s,filter .2s,background .2s}
+.pill-btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.07);box-shadow:0 12px 22px -10px var(--accent)}
+.pill-btn--ghost{background:transparent;color:var(--accent-ink);border-color:var(--border-strong);box-shadow:none}
+.pill-btn--ghost:hover:not(:disabled){background:var(--accent-soft);border-color:var(--accent);box-shadow:none;filter:none}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:.7rem;font-weight:700;flex-shrink:0}
+.chip-friend,.chip-joined{background:var(--success-soft);color:var(--success)}
+.chip-pending{background:var(--warn-soft);color:var(--warn)}
+.chip-public{background:var(--accent-soft);color:var(--accent-ink)}
+
+/* lift on primary buttons from component stylesheets */
+:is(.save-btn,.registerButton,.create-group-btn,.group-submit,.btn-action-primary,.btn-action-success,.home-btn,.edit-profile-btn,.message-input button:not([type=button]),.home-request-actions button:first-child):hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 20px -10px var(--accent)}
+
+/* theme toggle */
+.theme-toggle{width:38px;height:38px;padding:0;display:grid;place-items:center;border-radius:50%;background:var(--surface-2);border:1px solid var(--border);color:var(--text);overflow:hidden}
+.theme-toggle:hover:not(:disabled){border-color:var(--accent);color:var(--accent-ink);transform:rotate(12deg)}
+.theme-toggle.floating{position:fixed;top:16px;right:16px;z-index:50}
+html.theme-anim,html.theme-anim *{transition:background-color .4s ease,color .4s ease,border-color .4s ease,box-shadow .4s ease!important}
+
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
-@keyframes pop-in{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-@keyframes slide-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes slide-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes msg-in{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes drift{to{transform:translate3d(3%,2%,0) scale(1.08)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shimmer{to{background-position:-200% 0}}
-@keyframes pulse-ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 45%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--success) 50%,transparent)}70%,100%{box-shadow:0 0 0 8px transparent}}
 
-.skeleton{background:linear-gradient(90deg,var(--surface-2) 30%,var(--surface) 50%,var(--surface-2) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:var(--r-md)}
+.skeleton{background:linear-gradient(90deg,var(--surface-2) 30%,var(--border) 50%,var(--surface-2) 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:var(--r-lg)}
 .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 
 @media (prefers-reduced-motion:reduce){

@@ -18,6 +18,8 @@ import "../../styles/Discover/DiscoverPage.style.css";
 
 import { joinGroupFunct } from "../../api/group.api.js";
 
+import { motion } from "framer-motion";
+
 function DiscoverPage() {
 
     const [joiningGroupId, setJoiningGroupId] = useState(null);
@@ -366,34 +368,30 @@ function DiscoverPage() {
                 </div>
             </div>
 
-            <div className="discover-feed-list">
-                {cards.map((card) => (
-                    <div
-                        key={`${card.cardType}-${card._id}`}
-                        className="discover-item-wrapper"
-                        onClick={() =>
-                            handleCardClick(
-                                card
-                            )
-                        }
-                    >
-                        {card.cardType ===
-                        "user" ? (
-                            <UserCard
-                                user={card}
-                                onMessage={handleMessage}
-                            />
-                        ) : (
-                            <GroupCard
-                                group={card}
-                                onJoin={handleJoinGroup}
-                                onMessage={handleGroupMessage}
-                                joining={joiningGroupId === card._id}
-                            />
-                        )}
-                    </div>
-                ))}
-            </div>
+            {cards.map((card, index) => (
+                <motion.div
+                    key={`${card.cardType}-${card._id}`}
+                    className="discover-item-wrapper"
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: Math.min(index % 10, 8) * 0.05 }}
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.99 }}
+                    onClick={() => handleCardClick(card)}
+                >
+                    {card.cardType === "user" ? (
+                        <UserCard user={card} onMessage={handleMessage} />
+                    ) : (
+                        <GroupCard
+                            group={card}
+                            onJoin={handleJoinGroup}
+                            onMessage={handleGroupMessage}
+                            joining={joiningGroupId === card._id}
+                        />
+                    )}
+                </motion.div>
+            ))}
+
 
             {!isLoading &&
                 cards.length === 0 && (

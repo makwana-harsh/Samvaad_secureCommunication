@@ -7,7 +7,7 @@
 .avatar-wrapper{position:relative;width:130px;height:130px;margin:0 auto 2rem}
 .big-profile-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--surface-2);box-shadow:0 0 0 4px var(--bg),0 0 0 6px var(--accent);cursor:pointer;transition:filter .2s}
 .big-profile-avatar:hover{filter:brightness(.92)}
-.avatar-upload-badge{position:absolute;bottom:0;right:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);border:3px solid var(--bg);border-radius:50%;cursor:pointer;transition:transform .2s var(--ease)}
+.avatar-upload-badge{position:absolute;bottom:0;right:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--accent-grad);color:var(--on-accent);border:3px solid var(--bg);border-radius:50%;cursor:pointer;transition:transform .2s var(--ease)}
 .avatar-upload-badge:hover{transform:scale(1.1)}
 
 .profile-form{display:flex;flex-direction:column;gap:1.2rem}
@@ -18,8 +18,8 @@
 .form-group input:disabled,.form-group textarea:disabled{background:var(--surface-2);color:var(--text-2);border-color:var(--border)}
 
 .edit-form-actions{display:flex;gap:1rem;margin-top:1rem}
-.save-btn{flex:1;padding:.75rem;background:var(--accent);color:var(--on-accent);border:0;border-radius:var(--r-md);font-weight:600;cursor:pointer;transition:background .2s,transform .15s var(--ease)}
-.save-btn:hover:not(:disabled){background:var(--accent-hover)}
+.save-btn{flex:1;padding:.75rem;background:var(--accent-grad);color:var(--on-accent);border:0;border-radius:var(--r-md);font-weight:600;cursor:pointer;transition:background .2s,transform .15s var(--ease)}
+.save-btn:hover:not(:disabled){filter:brightness(1.08)}
 .save-btn:disabled{opacity:.55;cursor:not-allowed}
 .cancel-btn{flex:1;padding:.75rem;background:transparent;color:var(--text-2);border:1px solid var(--border-strong);border-radius:var(--r-md);font-weight:600;cursor:pointer}
 .cancel-btn:hover{background:var(--surface-2);color:var(--text)}
