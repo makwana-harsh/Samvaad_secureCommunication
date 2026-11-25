@@ -8,9 +8,11 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     const { user, accessToken } = useAuth();
 
+    const SOCKET_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     useEffect(() => {
         if (user && accessToken) {
-            const newSocket = io("http://localhost:3000", {
+            const newSocket = io(SOCKET_URL, {
                 auth: { token: accessToken },
                 autoConnect: true,
                 reconnection: true,

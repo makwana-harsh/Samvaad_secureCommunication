@@ -36,7 +36,7 @@ export const loginUserFunct = async (req, res) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: isProd,
-            sameSite: isProd ? "strict" : "lax",
+            sameSite: isProd ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
@@ -69,7 +69,7 @@ export const logoutUserFunct = async (req, res) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: isProd,
-            sameSite: isProd ? "strict" : "lax"
+            sameSite: isProd ? "none" : "lax"
         });
 
         return res.status(200).json({ message: "Logged out successfully" });

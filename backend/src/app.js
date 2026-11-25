@@ -15,10 +15,10 @@ import conversationRoutes from "./modules/conversation/conversation.routes.js";
 import messageRoutes from "./modules/message/message.routes.js";
 
 const app = express();
-
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
 }));
 
