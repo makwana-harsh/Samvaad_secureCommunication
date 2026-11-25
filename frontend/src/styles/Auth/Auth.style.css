@@ -1,0 +1,22 @@
+.auth-shell{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.auth-card{width:min(420px,100%);padding:34px;background:var(--surface);backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--border);border-radius:28px;box-shadow:var(--shadow-lg)}
+.auth-card.wide{width:min(580px,100%)}
+.auth-brand{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;margin-bottom:18px;background:var(--accent-grad);color:var(--on-accent);box-shadow:0 12px 24px -10px var(--accent)}
+.auth-title{margin:0;font-size:1.8rem;font-weight:800;letter-spacing:-.035em}
+.auth-sub{margin:6px 0 24px;color:var(--text-2)}
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.auth-grid .full{grid-column:1/-1}
+.auth-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.auth-field label{font-size:.8rem;font-weight:700;color:var(--text-2)}
+.auth-input{display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);color:var(--text-3);transition:border-color .2s,box-shadow .2s,background .2s}
+.auth-input:focus-within{border-color:var(--accent);color:var(--accent-ink);background:var(--surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.auth-input input{flex:1;min-width:0;border:0;background:transparent;padding:.85rem 0;outline:none;box-shadow:none;color:var(--text)}
+.auth-input input:focus{box-shadow:none}
+.auth-eye{padding:4px;border:0;background:transparent;color:inherit;display:grid;place-items:center}
+.auth-eye:hover:not(:disabled){background:transparent;color:var(--text)}
+.auth-submit{margin-top:6px;padding:.9rem;font-size:1rem;border-radius:14px}
+.auth-switch{margin:20px 0 0;text-align:center;color:var(--text-2);font-size:.92rem}
+.auth-link{padding:0;border:0;background:none;color:var(--accent-ink);font-weight:700}
+.auth-link:hover:not(:disabled){background:none;text-decoration:underline}
+@media (max-width:560px){.auth-grid{grid-template-columns:1fr}.auth-card{padding:26px}}

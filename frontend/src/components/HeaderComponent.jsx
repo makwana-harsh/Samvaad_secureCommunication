@@ -1,7 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Compass, Home, LogOut, MessageCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
-import '../styles/HeaderComponent.style.css';
+import ThemeToggle from "./ThemeToggle.jsx";
+import "../styles/HeaderComponent.style.css";
 
+const LINKS = [
+    { to: "/home", label: "Home", Icon: Home },
+    { to: "/conversations", label: "Conversations", Icon: MessageCircle },
+    { to: "/discover", label: "Discover", Icon: Compass },
+];
 
 function HeaderComponent() {
     const { logout } = useAuth();
@@ -9,42 +17,46 @@ function HeaderComponent() {
 
     const handleLogout = async () => {
         try {
-            await logout(); // Clears user & accessToken in AuthContext
+            await logout();
             navigate("/login", { replace: true });
-        } 
-        catch (error) {
+        } catch (error) {
             console.error("Logout failed:", error);
         }
     };
 
     return (
         <header className="app-header">
-            {/* 1. App Logo */}
             <div className="header-logo" onClick={() => navigate("/home")}>
-                <span className="header-logo-symbol">💬</span>
+                <span className="header-logo-mark"><MessageCircle size={18} strokeWidth={2.4} /></span>
                 <span className="header-logo-text">Samvaad</span>
             </div>
 
-            {/* 2. Navigation Bar */}
             <nav className="header-nav">
-            
-                <NavLink to="/home" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")} >
-                    Home
-                </NavLink>
-                
-                <NavLink to="/conversations" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")} >
-                    Conversations
-                </NavLink>
-                
-                <NavLink to="/discover" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")} >
-                    Discover
-                </NavLink>
-            
+                {LINKS.map(({ to, label, Icon }) => (
+                    <NavLink key={to} to={to} className="nav-link">
+                        {({ isActive }) => (
+                            <>
+                                {isActive && (
+                                    <motion.span
+                                        layoutId="nav-pill"
+                                        className="nav-pill"
+                                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                                    />
+                                )}
+                                <Icon size={16} />
+                                <span className="nav-label">{label}</span>
+                            </>
+                        )}
+                    </NavLink>
+                ))}
             </nav>
 
-            {/* 3. Logout Section */}
             <div className="header-actions">
-                <button className="logout-btn" onClick={handleLogout}> Logout </button>
+                <ThemeToggle />
+                <button className="logout-btn" onClick={handleLogout}>
+                    <LogOut size={16} />
+                    <span className="logout-label">Logout</span>
+                </button>
             </div>
         </header>
     );

@@ -1,77 +1,96 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { AtSign, Eye, EyeOff, Lock, Mail, MessageCircle, Phone, User } from "lucide-react";
+import { registerUserFunct } from "../../api/auth.api";
+import ThemeToggle from "../../components/ThemeToggle.jsx";
+import "../../styles/Auth/Auth.style.css";
 
-import {registerUserFunct} from "../../api/auth.api";
-import '../../styles/Auth/RegisterPage.style.css';
+const EMPTY = { fullName: "", userName: "", emailId: "", mobileNo: "", password: "" };
 
-function RegisterPage(){
+function RegisterPage() {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState({fullName:'', userName:'', emailId:'', mobileNo:'', password:''});
+    const [userData, setUserData] = useState(EMPTY);
+    const [showPassword, setShowPassword] = useState(false);
+    const [busy, setBusy] = useState(false);
 
     function handleChange(e) {
         const { name, value } = e.target;
-        setUserData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        setUserData((prevData) => ({ ...prevData, [name]: value }));
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const res = await registerUserFunct(userData);  
+            setBusy(true);
+            const res = await registerUserFunct(userData);
             alert(res.message || "Registration successful!");
             navigate("/login");
-        } 
-        catch (err) {
-            // Inspect raw error in DevTools console
+        } catch (err) {
             console.log("Full Error Object:", err.response?.data);
-
-            // Check top-level message FIRST, then Zod array, then fallback
-            const errorMessage = 
-                err.response?.data?.message || 
-                err.response?.data?.errors?.[0]?.message || 
-                "Registration failed";
-
-            alert(errorMessage);
+            alert(
+                err.response?.data?.message ||
+                err.response?.data?.errors?.[0]?.message ||
+                "Registration failed"
+            );
+        } finally {
+            setBusy(false);
         }
-        setUserData({
-            fullName: "",
-            userName: "",
-            emailId: "",
-            mobileNo: "",
-            password: ""
-        });
+        setUserData(EMPTY);
     }
 
-    return (<>
-        <div className="register_main_container">
-            <h1 className="register_header_section">Create Your Account</h1>
-
-            <form className="register_form_section" onSubmit={handleSubmit}>
-                <div>
-                    <label>Full Name:</label>
-                    <input type="text" name="fullName" placeholder="Enter Full Name" required value={userData.fullName} onChange={handleChange} />
-                </div>
-                <div>
-                    <label>Username:</label>
-                    <input type="text" name="userName" placeholder="Enter Username" required value={userData.userName} onChange={handleChange} />
-                </div>
-                <div>
-                    <label>Email Id:</label>
-                    <input type="text" name="emailId" placeholder="Enter Email Id" required value={userData.emailId} onChange={handleChange} />
-                </div>
-                <div>
-                    <label>Mobile No:</label>
-                    <input type="text" name="mobileNo" placeholder="Enter Mobile Number" required value={userData.mobileNo} onChange={handleChange} />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" placeholder="Enter Your Password" required value={userData.password} onChange={handleChange} />
-                </div>
-                <button className="registerButton" type="submit">Register</button>
-            </form>
+    const Field = ({ label, name, Icon, type = "text", placeholder, full, children }) => (
+        <div className={`auth-field ${full ? "full" : ""}`}>
+            <label htmlFor={name}>{label}</label>
+            <div className="auth-input">
+                <Icon size={17} />
+                <input id={name} type={type} name={name} required placeholder={placeholder}
+                    value={userData[name]} onChange={handleChange} />
+                {children}
+            </div>
         </div>
-    </>);
+    );
+
+    return (
+        <div className="auth-shell">
+            <ThemeToggle className="floating" />
+
+            <motion.div
+                className="auth-card wide"
+                initial={{ opacity: 0, y: 28, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+                <div className="auth-brand"><MessageCircle size={24} strokeWidth={2.4} /></div>
+                <h1 className="auth-title">Create your account</h1>
+                <p className="auth-sub">It takes less than a minute.</p>
+
+                <form className="auth-form" onSubmit={handleSubmit}>
+                    <div className="auth-grid">
+                        <Field label="Full name" name="fullName" Icon={User} placeholder="Enter full name" />
+                        <Field label="Username" name="userName" Icon={AtSign} placeholder="Enter username" />
+                        <Field label="Email" name="emailId" Icon={Mail} placeholder="Enter email id" />
+                        <Field label="Mobile number" name="mobileNo" Icon={Phone} placeholder="Enter mobile number" />
+                        <Field label="Password" name="password" Icon={Lock} full
+                            type={showPassword ? "text" : "password"} placeholder="Create a password">
+                            <button type="button" className="auth-eye" onClick={() => setShowPassword((s) => !s)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}>
+                                {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                            </button>
+                        </Field>
+                    </div>
+
+                    <motion.button type="submit" className="pill-btn auth-submit" disabled={busy} whileTap={{ scale: 0.98 }}>
+                        {busy ? "Creating account..." : "Register"}
+                    </motion.button>
+                </form>
+
+                <p className="auth-switch">
+                    Already have an account? <button type="button" className="auth-link" onClick={() => navigate("/login")}>Login</button>
+                </p>
+            </motion.div>
+        </div>
+    );
 }
+
 export default RegisterPage;
